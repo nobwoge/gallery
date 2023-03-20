@@ -1,0 +1,52 @@
+def WEB_URL = 'https://gallery-uxho.onrender.com'
+pipeline {
+    agent any
+    tools {
+        nodejs '19.8.1'
+    }
+    stages {
+        stage('Start') {
+            steps {
+                echo 'Build is starting'
+            }
+        }
+        stage('Clone github repository') {
+            steps {
+                git credentialsId: '1376d067-ec04-4430-bdc6-bbf08193da14', url: 'https://github.com/nobwoge/gallery.git'
+            }
+        }
+        stage('Install dependencies') {
+            steps {
+                bat '''
+                   cd gallery_git
+                   npm install
+                   '''
+            }
+        }
+        stage ('test') {
+            steps {
+                testNG()
+            }
+        }
+        stage('slack message') {
+            steps {
+                slackSend channel: 'jenkins-project', message: 'test'
+            }
+            
+        }
+        stage('send email') {
+            steps {
+                emailext body: '''Hi,
+                This is the 6th IP kindly review
+                Regards
+                Albert''', subject: 'Project Submission', to: 'albertnyambegaa@gmail.com'
+            }
+        }
+                stage('End') {
+            steps {
+                echo 'Build has run successfully'
+            }
+        }
+        
+    }
+}

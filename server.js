@@ -13,6 +13,9 @@ const app = express();
 
 // connecting the database
 
+let mongodb_url = 'mongodb+srv://aobwoge:HjczIaCR4FnZB36d@gallery.eyzagcj.mongodb.net/?retryWrites=true&w=majority';
+let dbName = 'darkroom';
+
 const MONGODB_URI = process.env.MONGODB_URI || config.mongoURI[app.settings.env]
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true  },(err)=>{
     if (err) {
